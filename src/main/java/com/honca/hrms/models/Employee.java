@@ -1,7 +1,6 @@
 package com.honca.hrms.models;
 
 import jakarta.persistence.*;
-
 import java.util.Set;
 
 @Entity
