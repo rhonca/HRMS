@@ -3,9 +3,12 @@ package com.honca.hrms.services.impl;
 import com.honca.hrms.models.Project;
 import com.honca.hrms.repositories.ProjectRepositorie;
 import com.honca.hrms.services.interfaces.ProjectService;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepositorie projectRepositorie;

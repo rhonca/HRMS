@@ -3,8 +3,11 @@ package com.honca.hrms.services.impl;
 import com.honca.hrms.models.Department;
 import com.honca.hrms.repositories.DepartmentRepositorie;
 import com.honca.hrms.services.interfaces.DepartmentService;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepositorie departmentRepositorie;

@@ -3,10 +3,12 @@ package com.honca.hrms.services.impl;
 import com.honca.hrms.models.Employee;
 import com.honca.hrms.repositories.EmployeeRepositorie;
 import com.honca.hrms.services.interfaces.EmployeeService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepositorie employeeRepositorie;
