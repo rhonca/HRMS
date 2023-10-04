@@ -1,1 +1,8 @@
-
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HRMS_HOSTNAME}:${DB_HRMS_PORT}/${DB_HRMS_NAME}
+    username: ${DB_HRMS_USERNAME}
+    password: ${DB_HRMS_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
