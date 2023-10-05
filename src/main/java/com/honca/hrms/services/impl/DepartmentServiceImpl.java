@@ -1,13 +1,19 @@
 package com.honca.hrms.services.impl;
 
-import com.honca.hrms.models.Department;
+import com.honca.hrms.models.dto.DepartmentRequest;
+import com.honca.hrms.models.entities.Department;
+import com.honca.hrms.models.dto.DepartmentResponse;
+import com.honca.hrms.services.mappers.DepartmentMapper;
+import com.honca.hrms.services.mappers.DepartmentRequestMapper;
 import com.honca.hrms.repositories.DepartmentRepositorie;
 import com.honca.hrms.services.interfaces.DepartmentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+//@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepositorie departmentRepositorie;
@@ -17,22 +23,22 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department findDepartamentByName(String departmentName) {
-        return departmentRepositorie.findByName(departmentName);
+    public DepartmentResponse findDepartamentByName(String departmentName) {
+        return DepartmentMapper.INSTANCE.mapToDepartmentResponse(departmentRepositorie.findByName(departmentName));
     }
 
     @Override
-    public List<Department> findAllDepartaments() {
-        return departmentRepositorie.findAll();
+    public List<DepartmentResponse> findAllDepartments() {
+        return departmentRepositorie.findAll().stream().map(DepartmentMapper.INSTANCE::mapToDepartmentResponse).collect(Collectors.toList());
     }
 
     @Override
-    public Department addDepartament(Department department) {
-        return departmentRepositorie.save(department);
+    public DepartmentResponse addDepartment(DepartmentRequest department) {
+        return DepartmentMapper.INSTANCE.mapToDepartmentResponse(departmentRepositorie.save(DepartmentRequestMapper.INSTANCE.mapToDepartment(department)));
     }
 
     @Override
-    public Department updateDepartament(Department updatedDepartment) {
+    public DepartmentResponse updateDepartament(DepartmentRequest updatedDepartment) {
         //TO DO method code
         return null;
     }

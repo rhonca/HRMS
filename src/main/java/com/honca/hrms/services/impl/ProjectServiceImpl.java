@@ -1,14 +1,20 @@
 package com.honca.hrms.services.impl;
 
-import com.honca.hrms.models.Project;
+import com.honca.hrms.models.dto.ProjectRequest;
+import com.honca.hrms.models.dto.ProjectResponse;
+import com.honca.hrms.models.entities.Project;
 import com.honca.hrms.repositories.ProjectRepositorie;
 import com.honca.hrms.services.interfaces.ProjectService;
+import com.honca.hrms.services.mappers.ProjectMapper;
+import com.honca.hrms.services.mappers.ProjectRequestMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+//@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepositorie projectRepositorie;
@@ -18,22 +24,27 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Optional<Project> findProjectById(Long projectId) {
-        return projectRepositorie.findById(projectId);
+    public ProjectResponse findProjectById(Long projectId) {
+        return ProjectMapper.INSTANCE.mapToProjectResponse(projectRepositorie.findById(projectId).get());
     }
 
     @Override
-    public List<Project> findAllProjects() {
-        return projectRepositorie.findAll();
+    public List<ProjectResponse> findAllProjects() {
+        return projectRepositorie.findAll()
+                .stream()
+                .map(ProjectMapper.INSTANCE::mapToProjectResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Project addProject(Project project) {
-        return projectRepositorie.save(project);
+    public ProjectResponse addProject(ProjectRequest projectRequest) {
+        return ProjectMapper.INSTANCE.
+                mapToProjectResponse(projectRepositorie
+                        .save(ProjectRequestMapper.INSTANCE.mapToProject(projectRequest)));
     }
 
     @Override
-    public Project updateProject(Project updatedProject) {
+    public ProjectResponse updateProject(ProjectRequest updatedProject) {
         //TO DO method code
         return null;
     }
