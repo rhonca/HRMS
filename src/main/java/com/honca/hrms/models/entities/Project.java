@@ -1,13 +1,13 @@
-package com.honca.hrms.models;
+package com.honca.hrms.models.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "projects")
 public class Project {

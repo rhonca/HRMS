@@ -1,8 +1,12 @@
-package com.honca.hrms.models;
+package com.honca.hrms.models.entities;
 
 import jakarta.persistence.*;
-import java.util.Set;
+import lombok.*;
 
+import java.util.Set;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "employees")
 public class Employee {
