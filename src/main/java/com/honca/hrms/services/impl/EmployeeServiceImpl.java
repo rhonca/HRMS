@@ -6,10 +6,8 @@ import com.honca.hrms.models.entities.Employee;
 import com.honca.hrms.repositories.EmployeeRepositorie;
 import com.honca.hrms.services.interfaces.EmployeeService;
 import com.honca.hrms.services.mappers.EmployeeMapper;
-import com.honca.hrms.services.mappers.EmployeeRequestMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeResponse findEmployeeById(Long employeeId) {
-        return EmployeeMapper.INSTANCE.mapToEmployeeResponse(employeeRepositorie.findById(employeeId).get());
+        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employeeRepositorie.findById(employeeId).get());
         //TO DO exception handling
     }
 
@@ -32,15 +30,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeResponse> findAllEmployees() {
         return employeeRepositorie.findAll()
                 .stream()
-                .map(EmployeeMapper.INSTANCE::mapToEmployeeResponse)
+                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public EmployeeResponse addEmployee(EmployeeRequest employeeRequest) {
         return EmployeeMapper.INSTANCE
-                .mapToEmployeeResponse(employeeRepositorie
-                        .save(EmployeeRequestMapper.INSTANCE.mapToEmployee(employeeRequest)));
+                .employeeToEmployeeResponse(employeeRepositorie
+                        .save(EmployeeMapper.INSTANCE.employeeRequestToEmployee(employeeRequest)));
     }
 
     @Override

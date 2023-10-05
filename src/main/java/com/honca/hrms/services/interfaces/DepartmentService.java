@@ -6,9 +6,9 @@ import com.honca.hrms.models.dto.DepartmentResponse;
 import java.util.List;
 
 public interface DepartmentService {
-    DepartmentResponse findDepartamentByName(String departmentName);
+    DepartmentResponse findDepartmentByName(String departmentName);
     List<DepartmentResponse> findAllDepartments();
     DepartmentResponse addDepartment(DepartmentRequest department);
-    DepartmentResponse updateDepartament(DepartmentRequest updatedDepartment);
-    void deleteDepartament(Long departamentId);
+    DepartmentResponse updateDepartment(DepartmentRequest updatedDepartment);
+    void deleteDepartment(Long departmentId);
 }

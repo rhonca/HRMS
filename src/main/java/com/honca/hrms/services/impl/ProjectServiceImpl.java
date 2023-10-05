@@ -6,11 +6,9 @@ import com.honca.hrms.models.entities.Project;
 import com.honca.hrms.repositories.ProjectRepositorie;
 import com.honca.hrms.services.interfaces.ProjectService;
 import com.honca.hrms.services.mappers.ProjectMapper;
-import com.honca.hrms.services.mappers.ProjectRequestMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,22 +23,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponse findProjectById(Long projectId) {
-        return ProjectMapper.INSTANCE.mapToProjectResponse(projectRepositorie.findById(projectId).get());
+        return ProjectMapper.INSTANCE.projectToProjectResponse(projectRepositorie.findById(projectId).get());
     }
 
     @Override
     public List<ProjectResponse> findAllProjects() {
         return projectRepositorie.findAll()
                 .stream()
-                .map(ProjectMapper.INSTANCE::mapToProjectResponse)
+                .map(ProjectMapper.INSTANCE::projectToProjectResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ProjectResponse addProject(ProjectRequest projectRequest) {
         return ProjectMapper.INSTANCE.
-                mapToProjectResponse(projectRepositorie
-                        .save(ProjectRequestMapper.INSTANCE.mapToProject(projectRequest)));
+                projectToProjectResponse(projectRepositorie
+                        .save(ProjectMapper.INSTANCE.projectRequestToProject(projectRequest)));
     }
 
     @Override
