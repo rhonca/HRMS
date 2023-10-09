@@ -36,11 +36,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department updateDepartment(Long departmentId, DepartmentRequest updatedDepartmentRequest) {
         Department updatedDepartment = DepartmentMapper.INSTANCE.departmentRequestToDepartment(updatedDepartmentRequest);
-        Department savedDepartment = null;
-        if (departmentRepository.existsById(departmentId)) {
-            savedDepartment = departmentRepository.save(updatedDepartment);
-        }
-        return savedDepartment;
+        Department foundDepartment = departmentRepository.findById(departmentId).orElseThrow(() -> new NoSuchElementException("Department could not be found"));
+        foundDepartment.setName(updatedDepartment.getName());
+        return departmentRepository.save(foundDepartment);
     }
 
     @Override

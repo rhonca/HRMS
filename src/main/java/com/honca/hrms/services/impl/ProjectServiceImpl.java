@@ -19,7 +19,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project findProjectById(Long projectId) {
-        return projectRepository.findById(projectId).orElseThrow(()-> new NoSuchElementException("Project could not be found"));
+        return projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException("Project could not be found"));
     }
 
     @Override
@@ -36,16 +36,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project updateProject(Long projectId, ProjectRequest updatedProjectRequest) {
         Project updatedProject = ProjectMapper.INSTANCE.projectRequestToProject(updatedProjectRequest);
-        Project savedProject = null;
-        if (projectRepository.existsById(projectId)) {
-            savedProject = projectRepository.save(updatedProject);
-        }
-        return savedProject;
+        Project foundProject = projectRepository.findById(projectId).orElseThrow(() -> new NoSuchElementException("Project could not be found"));
+        foundProject.setName(updatedProject.getName());
+        return projectRepository.save(foundProject);
     }
 
     @Override
     public void deleteProject(Project project) {
-        //TO DO exception handling
         projectRepository.delete(project);
     }
 }

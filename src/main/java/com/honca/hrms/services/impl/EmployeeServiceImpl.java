@@ -36,11 +36,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee updateEmployee(Long employeeId, EmployeeRequest updatedEmployeeRequest) {
         Employee updatedEmployee = EmployeeMapper.INSTANCE.employeeRequestToEmployee(updatedEmployeeRequest);
-        Employee savedEmployee = null;
-        if (employeeRepository.existsById(employeeId)) {
-            savedEmployee = employeeRepository.save(updatedEmployee);
-        }
-        return savedEmployee;
+        Employee foundEmployee = employeeRepository.findById(employeeId).orElseThrow(()->new NoSuchElementException("Employee could not be found"));
+        foundEmployee.setName(updatedEmployee.getName());
+        foundEmployee.setSurname(updatedEmployee.getSurname());
+        return employeeRepository.save(foundEmployee);
     }
 
     @Override
