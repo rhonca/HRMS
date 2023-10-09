@@ -1,56 +1,51 @@
 package com.honca.hrms.services.impl;
 
 import com.honca.hrms.models.dto.ProjectRequest;
-import com.honca.hrms.models.dto.ProjectResponse;
 import com.honca.hrms.models.entities.Project;
-import com.honca.hrms.repositories.ProjectRepositorie;
+import com.honca.hrms.repositories.ProjectRepository;
 import com.honca.hrms.services.interfaces.ProjectService;
 import com.honca.hrms.services.mappers.ProjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
-    private final ProjectRepositorie projectRepositorie;
+    private final ProjectRepository projectRepository;
 
-    public ProjectServiceImpl(ProjectRepositorie projectRepositorie) {
-        this.projectRepositorie = projectRepositorie;
+    @Override
+    public Project findProjectById(Long projectId) {
+        return projectRepository.findById(projectId).orElseThrow(()-> new NoSuchElementException("Project could not be found"));
     }
 
     @Override
-    public ProjectResponse findProjectById(Long projectId) {
-        return ProjectMapper.INSTANCE.projectToProjectResponse(projectRepositorie.findById(projectId).get());
+    public List<Project> findAllProjects() {
+        return projectRepository.findAll();
     }
 
     @Override
-    public List<ProjectResponse> findAllProjects() {
-        return projectRepositorie.findAll()
-                .stream()
-                .map(ProjectMapper.INSTANCE::projectToProjectResponse)
-                .collect(Collectors.toList());
+    public Project addProject(ProjectRequest newProjectRequest) {
+        Project newProject = ProjectMapper.INSTANCE.projectRequestToProject(newProjectRequest);
+        return projectRepository.save(newProject);
     }
 
     @Override
-    public ProjectResponse addProject(ProjectRequest projectRequest) {
-        return ProjectMapper.INSTANCE.
-                projectToProjectResponse(projectRepositorie
-                        .save(ProjectMapper.INSTANCE.projectRequestToProject(projectRequest)));
+    public Project updateProject(Long projectId, ProjectRequest updatedProjectRequest) {
+        Project updatedProject = ProjectMapper.INSTANCE.projectRequestToProject(updatedProjectRequest);
+        Project savedProject = null;
+        if (projectRepository.existsById(projectId)) {
+            savedProject = projectRepository.save(updatedProject);
+        }
+        return savedProject;
     }
 
     @Override
-    public ProjectResponse updateProject(ProjectRequest updatedProject) {
-        //TO DO method code
-        return null;
-    }
-
-    @Override
-    public void deleteProject(Long projectId) {
-        Project foundProject = projectRepositorie.findById(projectId).get();
+    public void deleteProject(Project project) {
         //TO DO exception handling
-        projectRepositorie.delete(foundProject);
+        projectRepository.delete(project);
     }
 }

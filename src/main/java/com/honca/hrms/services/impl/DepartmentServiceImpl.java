@@ -2,51 +2,49 @@ package com.honca.hrms.services.impl;
 
 import com.honca.hrms.models.dto.DepartmentRequest;
 import com.honca.hrms.models.entities.Department;
-import com.honca.hrms.models.dto.DepartmentResponse;
-import com.honca.hrms.services.mappers.DepartmentMapper;
-import com.honca.hrms.repositories.DepartmentRepositorie;
+import com.honca.hrms.repositories.DepartmentRepository;
 import com.honca.hrms.services.interfaces.DepartmentService;
+import com.honca.hrms.services.mappers.DepartmentMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private final DepartmentRepositorie departmentRepositorie;
+    private final DepartmentRepository departmentRepository;
 
-    public DepartmentServiceImpl(DepartmentRepositorie departmentRepositorie) {
-        this.departmentRepositorie = departmentRepositorie;
+    @Override
+    public Department findDepartmentById(Long departmentId) {
+        return departmentRepository.findById(departmentId).orElseThrow(() -> new NoSuchElementException("Department could not be found"));
     }
 
     @Override
-    public DepartmentResponse findDepartmentByName(String departmentName) {
-        return DepartmentMapper.INSTANCE.departmentToDepartmentResponse(departmentRepositorie.findByName(departmentName));
+    public List<Department> findAllDepartments() {
+        return departmentRepository.findAll();
     }
 
     @Override
-    public List<DepartmentResponse> findAllDepartments() {
-        //TO DO make list mapper
-        return departmentRepositorie.findAll().stream().map(DepartmentMapper.INSTANCE::departmentToDepartmentResponse).collect(Collectors.toList());
+    public Department addDepartment(DepartmentRequest newDepartmentRequest) {
+        Department newDepartment = DepartmentMapper.INSTANCE.departmentRequestToDepartment(newDepartmentRequest);
+        return departmentRepository.save(newDepartment);
     }
 
     @Override
-    public DepartmentResponse addDepartment(DepartmentRequest department) {
-        return DepartmentMapper.INSTANCE.departmentToDepartmentResponse(departmentRepositorie.save(DepartmentMapper.INSTANCE.departmentRequestToDepartment(department)));
+    public Department updateDepartment(Long departmentId, DepartmentRequest updatedDepartmentRequest) {
+        Department updatedDepartment = DepartmentMapper.INSTANCE.departmentRequestToDepartment(updatedDepartmentRequest);
+        Department savedDepartment = null;
+        if (departmentRepository.existsById(departmentId)) {
+            savedDepartment = departmentRepository.save(updatedDepartment);
+        }
+        return savedDepartment;
     }
 
     @Override
-    public DepartmentResponse updateDepartment(DepartmentRequest updatedDepartment) {
-        //TO DO method code
-        return null;
-    }
-
-    @Override
-    public void deleteDepartment(Long departmentId) {
-        Department foundDepartment = departmentRepositorie.findById(departmentId).get();
-        //TO DO exception handling
-        departmentRepositorie.delete(foundDepartment);
+    public void deleteDepartment(Department department) {
+        departmentRepository.delete(department);
     }
 }
