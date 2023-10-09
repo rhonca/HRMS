@@ -6,8 +6,6 @@ import java.util.Set;
 
 public record EmployeeRequest(
         String name,
-        String surname,
-        Department department,
-        Set<Project> projects
+        String surname
 ) {
 }

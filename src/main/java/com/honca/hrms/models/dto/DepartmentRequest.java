@@ -4,8 +4,6 @@ import com.honca.hrms.models.entities.Employee;
 import java.util.List;
 
 public record DepartmentRequest(
-        String name,
-        String surname,
-        List<Employee> employees
+        String name
 )
 {}

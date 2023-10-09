@@ -4,7 +4,6 @@ import com.honca.hrms.models.entities.Employee;
 import java.util.Set;
 
 public record ProjectRequest(
-        String name,
-        Set<Employee> employees
+        String name
 ) {
 }
