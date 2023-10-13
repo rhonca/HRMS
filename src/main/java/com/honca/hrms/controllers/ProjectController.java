@@ -1,9 +1,12 @@
 package com.honca.hrms.controllers;
 
+import com.honca.hrms.models.dto.EmployeeResponse;
 import com.honca.hrms.models.dto.ProjectRequest;
 import com.honca.hrms.models.dto.ProjectResponse;
+import com.honca.hrms.models.entities.Employee;
 import com.honca.hrms.models.entities.Project;
 import com.honca.hrms.services.interfaces.ProjectService;
+import com.honca.hrms.services.mappers.EmployeeMapper;
 import com.honca.hrms.services.mappers.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,20 @@ public class ProjectController {
         return new ResponseEntity<>(updatedProjectResponse, HttpStatus.OK);
     }
 
+    @PutMapping("/addEmployee/{projectId}/{employeeId}")
+    public ResponseEntity<ProjectResponse> addEmployee(@PathVariable Long projectId, @PathVariable Long employeeId) {
+        Project foundProject = projectService.addEmployee(projectId, employeeId);
+        ProjectResponse foundProjectResponse = ProjectMapper.INSTANCE.projectToProjectResponse(foundProject);
+        return new ResponseEntity<>(foundProjectResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/removeEmployee/{projectId}/{employeeId}")
+    public ResponseEntity<ProjectResponse> removeEmployee(@PathVariable Long projectId, @PathVariable Long employeeId) {
+        Project foundProject = projectService.removeEmployee(projectId, employeeId);
+        ProjectResponse foundProjectResponse = ProjectMapper.INSTANCE.projectToProjectResponse(foundProject);
+        return new ResponseEntity<>(foundProjectResponse, HttpStatus.OK);
+    }
+
     @GetMapping("/getAll")
     public ResponseEntity<List<ProjectResponse>> getAllProjects() {
         List<ProjectResponse> foundProjectResponseList = ProjectMapper.INSTANCE.projectToProjectResponse(projectService.findAllProjects());
@@ -40,6 +57,13 @@ public class ProjectController {
     public ResponseEntity<ProjectResponse> getProject(@PathVariable Long projectId) {
         ProjectResponse foundProject = ProjectMapper.INSTANCE.projectToProjectResponse(projectService.findProjectById(projectId));
         return new ResponseEntity<>(foundProject, HttpStatus.OK);
+    }
+
+    @GetMapping("/getEmployees/{projectId}")
+    public ResponseEntity<List<EmployeeResponse>> getEmployees(@PathVariable Long projectId) {
+        List<Employee> employeeList = projectService.getEmployees(projectId);
+        List<EmployeeResponse> employeeResponseList = EmployeeMapper.INSTANCE.EmployeeResponseemployeeToEmployeeResponse(employeeList);
+        return new ResponseEntity<>(employeeResponseList, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{projectId}")

@@ -1,9 +1,12 @@
 package com.honca.hrms.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -15,7 +18,13 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String password;
-    @OneToMany(mappedBy = "department")
-    private List<Employee> employees;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    private Set<Employee> employees;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }
